@@ -1,0 +1,27 @@
+RecipeFormatVersion: 2020-01-25
+ComponentName: test.docker.tes
+ComponentVersion: 1.0.0
+ComponentDescription: ""
+ComponentPublisher: AWS
+ComponentDependencies: 
+  aws.greengrass.DockerApplicationManager:
+    VersionRequirement: ">0.0.0" 
+  community.greengrass.routing.tes:
+    VersionRequirement: ">0.0.0"
+Manifests:
+  - Lifecycle:
+      Run:
+        Script: |-
+          docker run --rm \
+            -p 8898:8888 \
+            --network=host \
+            -e SVCUID -e AWS_REGION \
+            -e AWS_CONTAINER_AUTHORIZATION_TOKEN \
+            -e AWS_CONTAINER_CREDENTIALS_FULL_URI \
+            -e AWS_GG_NUCLEUS_DOMAIN_SOCKET_FILEPATH_FOR_COMPONENT \
+            -e AWS_IOT_THING_NAME \
+            -v {kernel:rootPath}/ipc.socket:{kernel:rootPath}/ipc.socket \
+            -v $PWD:/data \
+            699391019698.dkr.ecr.eu-west-1.amazonaws.com/jupyter jupyter notebook --allow-root --ip '0.0.0.0'
+    Artifacts:
+      - Uri: docker:699391019698.dkr.ecr.eu-west-1.amazonaws.com/jupyter

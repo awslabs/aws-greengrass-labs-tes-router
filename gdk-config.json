@@ -1,0 +1,16 @@
+{
+    "component": {
+        "community.greengrass.tes.router": {
+        "version": "1.0.0",
+        "author": "Amazon Web Services",
+        "build": {
+            "build_system": "zip"
+        },
+        "publish": {
+            "bucket": "<your-bucket-prefix>",
+            "region": "eu-west-1"
+        }
+    }
+    },
+    "tools_version": "1.0.0"
+}

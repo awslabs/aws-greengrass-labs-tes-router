@@ -1,0 +1,25 @@
+RecipeFormatVersion: 2020-01-25
+ComponentName: community.greengrass.routing.tes
+ComponentVersion: 1.0.0
+ComponentDescription: A component that sets up routing via nftables/iptables to allow container to access TES
+ComponentPublisher: Amazon Web Services
+ComponentDependencies: 
+  aws.greengrass.TokenExchangeService:
+    VersionRequirement: ">0.0.0"
+    DependencyType: HARD
+Manifests:
+  - Lifecycle:
+      Run: 
+        Script: |-
+          # get TES port from env variable
+          TES_PORT=$(echo $AWS_CONTAINER_CREDENTIALS_FULL_URI | sed -r 's/^(http:\/\/localhost:)([0-9]+).*/\2/')
+          sysctl -w net.ipv4.conf.all.route_localnet=1
+          if [ -x "$(command -v nft)" ]
+          then
+            nft add rule ip nat PREROUTING ip daddr 169.254.170.2 tcp dport 80 counter dnat to 127.0.0.1:$TES_PORT
+            nft add rule ip nat OUTPUT ip daddr 169.254.170.2 tcp dport 80 counter redirect to :$TES_PORT
+          else
+            iptables -t nat -A PREROUTING -p tcp -d 169.254.170.2 --dport 80 -j DNAT --to-destination 127.0.0.1:$TES_PORT
+            iptables -t nat -A OUTPUT -d 169.254.170.2 -p tcp -m tcp --dport 80 -j REDIRECT --to-ports $TES_PORT
+          fi
+        RequiresPrivilege: true
