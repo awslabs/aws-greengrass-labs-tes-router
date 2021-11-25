@@ -1,4 +1,4 @@
-# community.greengrass.routing.tes
+# aws.greengrass.labs.tes.router
 
 This component configures `nftables` or `iptables` on a Greengrass device to be able to use `aws.greengrass.TokenExchangeService` with containers. The TES port is extracted from the `AWS_CONTAINER_CREDENTIALS_FULL_URI` environment variable and used to create the `nftables/iptables` entries.
 

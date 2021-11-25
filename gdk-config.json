@@ -1,6 +1,6 @@
 {
     "component": {
-        "community.greengrass.tes.router": {
+        "aws.greengrass.labs.tes.router": {
         "version": "1.0.0",
         "author": "Amazon Web Services",
         "build": {
